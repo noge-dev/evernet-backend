@@ -12,6 +12,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Evernet.Application", "src\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Evernet.Infrastructure", "src\Evernet.Infrastructure\Evernet.Infrastructure.csproj", "{99B045C5-A926-4564-858F-3EF647E2E183}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Evernet.AppHost", "src\Evernet.AppHost\Evernet.AppHost.csproj", "{A3EC6E67-B56F-4068-8184-EDF177F92074}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -22,6 +24,7 @@ Global
 		{572DC545-568B-4600-9AAB-DAF0427EE7D5} = {83FD3290-3E96-498C-975B-D13790486AFD}
 		{C7D8E55C-AB04-4649-8284-BE504D9E148D} = {83FD3290-3E96-498C-975B-D13790486AFD}
 		{99B045C5-A926-4564-858F-3EF647E2E183} = {83FD3290-3E96-498C-975B-D13790486AFD}
+		{A3EC6E67-B56F-4068-8184-EDF177F92074} = {83FD3290-3E96-498C-975B-D13790486AFD}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{C66D9E6C-BA05-4599-BB02-12C2FBB95977}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -40,5 +43,9 @@ Global
 		{99B045C5-A926-4564-858F-3EF647E2E183}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{99B045C5-A926-4564-858F-3EF647E2E183}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{99B045C5-A926-4564-858F-3EF647E2E183}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A3EC6E67-B56F-4068-8184-EDF177F92074}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A3EC6E67-B56F-4068-8184-EDF177F92074}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A3EC6E67-B56F-4068-8184-EDF177F92074}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A3EC6E67-B56F-4068-8184-EDF177F92074}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
