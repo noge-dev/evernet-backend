@@ -4,9 +4,20 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{FDEB3E34-65E
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{19E02E25-5B10-47D3-8CEB-943C4DBDC49E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Evernet.WebApi", "src\Evernet.WebApi\Evernet.WebApi.csproj", "{9655834E-F4B0-4BEB-856F-50976E514540}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{9655834E-F4B0-4BEB-856F-50976E514540} = {FDEB3E34-65E2-40E1-A192-826E18CFA6E0}
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9655834E-F4B0-4BEB-856F-50976E514540}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9655834E-F4B0-4BEB-856F-50976E514540}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9655834E-F4B0-4BEB-856F-50976E514540}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9655834E-F4B0-4BEB-856F-50976E514540}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
