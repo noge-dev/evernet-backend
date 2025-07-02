@@ -20,4 +20,6 @@ public class User
     [Required, MaxLength(256)] public required string PasswordHash { get; set; }
     public bool IsActive { get; set; }
     public DateTime CreatedAt { get; init; } = DateTime.UtcNow;
+
+    public ICollection<VerificationCode> VerificationCodes { get; set; } = new List<VerificationCode>();
 }

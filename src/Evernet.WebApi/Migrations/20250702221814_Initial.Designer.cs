@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Evernet.WebApi.Migrations
 {
     [DbContext(typeof(EvernetDbContext))]
-    [Migration("20250702173301_Initial")]
+    [Migration("20250702221814_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -67,6 +67,46 @@ namespace Evernet.WebApi.Migrations
                         .IsUnique();
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("Evernet.WebApi.Entities.VerificationCode", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(6)
+                        .HasColumnType("character varying(6)");
+
+                    b.Property<DateTime>("Expiration")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("VerificationCodes");
+                });
+
+            modelBuilder.Entity("Evernet.WebApi.Entities.VerificationCode", b =>
+                {
+                    b.HasOne("Evernet.WebApi.Entities.User", "User")
+                        .WithMany("VerificationCodes")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Evernet.WebApi.Entities.User", b =>
+                {
+                    b.Navigation("VerificationCodes");
                 });
 #pragma warning restore 612, 618
         }
