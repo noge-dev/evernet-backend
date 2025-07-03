@@ -1,3 +1,8 @@
-﻿namespace Evernet.WebApi.DTOs;
+﻿using System.ComponentModel.DataAnnotations;
 
-public record ChangePasswordDto(Guid UserId, string CurrentPassword, string NewPassword);
+namespace Evernet.WebApi.DTOs;
+
+public record ChangePasswordDto(
+    [Required] string CurrentPassword,
+    [Required] [MinLength(8)] string NewPassword
+);

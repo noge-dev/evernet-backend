@@ -1,5 +1,7 @@
-﻿using Evernet.WebApi.DTOs;
+﻿using System.Security.Claims;
+using Evernet.WebApi.DTOs;
 using Evernet.WebApi.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Evernet.WebApi.Controllers;
@@ -85,6 +87,27 @@ public class AuthController(IAuthService authService) : ControllerBase
         {
             await authService.ResetPasswordAsync(dto);
             return Ok(new { Message = "Password reset successful. You can now log in with your new password." });
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { Error = ex.Message });
+        }
+    }
+
+    [Authorize]
+    [HttpPost("change-password")]
+    public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordDto dto)
+    {
+        var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)
+                          ?? User.FindFirst("sub");
+
+        if (userIdClaim is null || !Guid.TryParse(userIdClaim.Value, out var userId))
+            return Unauthorized();
+
+        try
+        {
+            await authService.ChangePasswordAsync(userId, dto);
+            return Ok(new { Message = "Password changed successfully." });
         }
         catch (Exception ex)
         {

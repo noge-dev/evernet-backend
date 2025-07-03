@@ -228,4 +228,19 @@ public class AuthService(
 
         await context.SaveChangesAsync();
     }
+
+    public async Task ChangePasswordAsync(Guid userId, ChangePasswordDto dto)
+    {
+        var user = await userRepository.GetByIdAsync(userId)
+                   ?? throw new Exception("User not found.");
+
+        if (!BCrypt.Net.BCrypt.Verify(dto.CurrentPassword, user.PasswordHash))
+            throw new Exception("Incorrect current password.");
+
+        if (dto.CurrentPassword == dto.NewPassword)
+            throw new Exception("The new password cannot be the same as the current password.");
+
+        user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(dto.NewPassword);
+        await userRepository.SaveChangesAsync();
+    }
 }
