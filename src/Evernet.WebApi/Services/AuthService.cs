@@ -1,6 +1,7 @@
 ﻿using Evernet.WebApi.Data;
 using Evernet.WebApi.DTOs;
 using Evernet.WebApi.Entities;
+using Evernet.WebApi.Enums;
 using Evernet.WebApi.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -28,6 +29,7 @@ public class AuthService(
             LastName = dto.LastName,
             Email = dto.Email,
             PasswordHash = BCrypt.Net.BCrypt.HashPassword(dto.Password),
+            Role = UserRole.Citizen,
             IsActive = false,
             CreatedAt = DateTime.UtcNow
         };
@@ -125,7 +127,7 @@ public class AuthService(
         if (!user.IsActive)
             throw new Exception("Account not verified.");
 
-        var accessToken = jwtTokenGenerator.GenerateToken(user.Id, user.Email);
+        var accessToken = jwtTokenGenerator.GenerateToken(user.Id, user.Email, user.Role.ToString());
 
         var refreshTokenString = refreshTokenGenerator.Generate();
         var refreshToken = new RefreshToken
@@ -166,7 +168,7 @@ public class AuthService(
 
         context.RefreshTokens.Add(newRefresh);
 
-        var newAccess = jwtTokenGenerator.GenerateToken(user.Id, user.Email);
+        var newAccess = jwtTokenGenerator.GenerateToken(user.Id, user.Email, user.Role.ToString());
 
         await context.SaveChangesAsync();
 

@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Evernet.WebApi.Enums;
 
 namespace Evernet.WebApi.Entities;
 
@@ -18,6 +19,7 @@ public class User
     public required string Email { get; set; }
 
     [Required, MaxLength(256)] public required string PasswordHash { get; set; }
+    public required UserRole Role { get; set; }
     public bool IsActive { get; set; }
     public DateTime CreatedAt { get; init; } = DateTime.UtcNow;
 
