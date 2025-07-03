@@ -10,7 +10,9 @@ public class AuthService(
     IUserRepository userRepository,
     IEmailService emailService,
     ICodeGenerator codeGenerator,
-    EvernetDbContext context, IJwtTokenGenerator jwtTokenGenerator)
+    EvernetDbContext context,
+    IJwtTokenGenerator jwtTokenGenerator,
+    IRefreshTokenGenerator refreshTokenGenerator)
     : IAuthService
 {
     public async Task RegisterAsync(RegisterDto dto)
@@ -123,7 +125,51 @@ public class AuthService(
         if (!user.IsActive)
             throw new Exception("Account not verified.");
 
-        var token = jwtTokenGenerator.GenerateToken(user.Id, user.Email);
-        return new LoginResponseDto(token);
+        var accessToken = jwtTokenGenerator.GenerateToken(user.Id, user.Email);
+
+        var refreshTokenString = refreshTokenGenerator.Generate();
+        var refreshToken = new RefreshToken
+        {
+            Token = refreshTokenString,
+            UserId = user.Id,
+            ExpiresAt = DateTime.UtcNow.AddDays(7),
+            User = user
+        };
+
+        context.RefreshTokens.Add(refreshToken);
+        await context.SaveChangesAsync();
+
+        return new LoginResponseDto(accessToken, refreshTokenString);
+    }
+
+    public async Task<LoginResponseDto> RefreshTokenAsync(RefreshTokenRequestDto dto)
+    {
+        var stored = await context.RefreshTokens
+            .Include(r => r.User)
+            .FirstOrDefaultAsync(r => r.Token == dto.RefreshToken);
+
+        if (stored is null || stored.IsRevoked)
+            throw new Exception("Invalid refresh token.");
+
+        var user = stored.User;
+
+        stored.RevokedAt = DateTime.UtcNow;
+
+        var newRefreshString = refreshTokenGenerator.Generate();
+        var newRefresh = new RefreshToken
+        {
+            Token = newRefreshString,
+            UserId = user.Id,
+            ExpiresAt = DateTime.UtcNow.AddDays(7),
+            User = user
+        };
+
+        context.RefreshTokens.Add(newRefresh);
+
+        var newAccess = jwtTokenGenerator.GenerateToken(user.Id, user.Email);
+
+        await context.SaveChangesAsync();
+
+        return new LoginResponseDto(newAccess, newRefreshString);
     }
 }
