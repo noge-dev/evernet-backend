@@ -172,4 +172,17 @@ public class AuthService(
 
         return new LoginResponseDto(newAccess, newRefreshString);
     }
+
+    public async Task LogoutAsync(LogoutRequestDto dto)
+    {
+        var stored = await context.RefreshTokens
+            .FirstOrDefaultAsync(r => r.Token == dto.RefreshToken);
+
+        if (stored is null || stored.IsRevoked)
+            throw new Exception("Refresh token invalid or already revoked.");
+
+        stored.RevokedAt = DateTime.UtcNow;
+
+        await context.SaveChangesAsync();
+    }
 }

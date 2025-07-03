@@ -2,6 +2,7 @@ using System.Text;
 using Evernet.WebApi.Configurations;
 using Evernet.WebApi.Data;
 using Evernet.WebApi.Interfaces;
+using Evernet.WebApi.OpenApi;
 using Evernet.WebApi.Repositories;
 using Evernet.WebApi.Services;
 using Microsoft.EntityFrameworkCore;
@@ -13,7 +14,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
+builder.Services.AddOpenApi(options => { options.AddDocumentTransformer<BearerSecuritySchemeTransformer>(); });
 
 builder.Services.AddDbContext<EvernetDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("postgresdb")

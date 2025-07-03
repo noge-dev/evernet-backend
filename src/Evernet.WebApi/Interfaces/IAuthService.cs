@@ -9,5 +9,6 @@ public interface IAuthService
     Task ResendCodeAsync(ResendCodeDto dto);
     Task<LoginResponseDto> LoginAsync(LoginDto dto);
     Task<LoginResponseDto> RefreshTokenAsync(RefreshTokenRequestDto dto);  
+    Task LogoutAsync(LogoutRequestDto dto);
     
 }

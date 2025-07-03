@@ -56,4 +56,11 @@ public class AuthController(IAuthService authService) : ControllerBase
         var result = await authService.RefreshTokenAsync(dto);
         return Ok(result);
     }
+
+    [HttpPost("logout")]
+    public async Task<IActionResult> Logout([FromBody] LogoutRequestDto dto)
+    {
+        await authService.LogoutAsync(dto);
+        return NoContent();
+    }
 }
