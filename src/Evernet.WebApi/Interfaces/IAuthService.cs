@@ -7,4 +7,6 @@ public interface IAuthService
     Task RegisterAsync(RegisterDto dto);
     Task VerifyCodeAsync(VerifyCodeDto dto);
     Task ResendCodeAsync(ResendCodeDto dto);
+    Task<LoginResponseDto> LoginAsync(LoginDto dto);
+    
 }

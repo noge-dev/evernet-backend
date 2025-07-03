@@ -42,4 +42,11 @@ public class AuthController(IAuthService authService) : ControllerBase
         await authService.ResendCodeAsync(dto);
         return NoContent();
     }
+
+    [HttpPost("login")]
+    public async Task<ActionResult<LoginResponseDto>> Login([FromBody] LoginDto dto)
+    {
+        var result = await authService.LoginAsync(dto);
+        return Ok(result);
+    }
 }

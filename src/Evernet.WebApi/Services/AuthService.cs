@@ -10,7 +10,7 @@ public class AuthService(
     IUserRepository userRepository,
     IEmailService emailService,
     ICodeGenerator codeGenerator,
-    EvernetDbContext context)
+    EvernetDbContext context, IJwtTokenGenerator jwtTokenGenerator)
     : IAuthService
 {
     public async Task RegisterAsync(RegisterDto dto)
@@ -112,5 +112,18 @@ public class AuthService(
         await emailService.SendAsync(user.Email,
             "Nouveau code de vérification",
             $"Voici votre nouveau code : {newCode}");
+    }
+
+    public async Task<LoginResponseDto> LoginAsync(LoginDto dto)
+    {
+        var user = await userRepository.GetByEmailAsync(dto.Email);
+        if (user is null || !BCrypt.Net.BCrypt.Verify(dto.Password, user.PasswordHash))
+            throw new Exception("Invalid email or password.");
+
+        if (!user.IsActive)
+            throw new Exception("Account not verified.");
+
+        var token = jwtTokenGenerator.GenerateToken(user.Id, user.Email);
+        return new LoginResponseDto(token);
     }
 }
