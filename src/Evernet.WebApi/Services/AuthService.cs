@@ -185,4 +185,47 @@ public class AuthService(
 
         await context.SaveChangesAsync();
     }
+
+    public async Task RequestResetPasswordAsync(string email)
+    {
+        var user = await userRepository.GetByEmailAsync(email);
+        if (user == null)
+            throw new Exception("User not found.");
+
+        var token = Guid.NewGuid().ToString();
+
+        var resetToken = new PasswordResetToken
+        {
+            UserId = user.Id,
+            Token = token,
+            ExpiresAt = DateTime.UtcNow.AddMinutes(30),
+            User = user
+        };
+
+        context.PasswordResetTokens.Add(resetToken);
+        await context.SaveChangesAsync();
+
+        var resetPasswordLink = $"http://localhost:3000/reset-password?token={token}";
+
+        await emailService.SendAsync(user.Email, "Réinitialisation de mot de passe",
+            $"Cliquez sur ce lien pour réinitialiser votre mot de passe : {resetPasswordLink}");
+    }
+
+    public async Task ResetPasswordAsync(ResetPasswordDto dto)
+    {
+        var resetToken = await context.PasswordResetTokens
+            .Include(t => t.User)
+            .FirstOrDefaultAsync(t =>
+                t.Token == dto.Token &&
+                t.ExpiresAt > DateTime.UtcNow);
+
+        if (resetToken == null)
+            throw new Exception("Invalid or expired password reset token.");
+
+        resetToken.User.PasswordHash = BCrypt.Net.BCrypt.HashPassword(dto.NewPassword);
+
+        context.PasswordResetTokens.Remove(resetToken);
+
+        await context.SaveChangesAsync();
+    }
 }

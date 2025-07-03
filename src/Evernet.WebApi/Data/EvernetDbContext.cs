@@ -8,6 +8,7 @@ public class EvernetDbContext(DbContextOptions<EvernetDbContext> options) : DbCo
     public DbSet<User> Users { get; set; }
     public DbSet<VerificationCode> VerificationCodes { get; set; }
     public DbSet<RefreshToken> RefreshTokens { get; set; }
+    public DbSet<PasswordResetToken> PasswordResetTokens { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
