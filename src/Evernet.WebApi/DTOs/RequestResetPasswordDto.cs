@@ -1,3 +1,3 @@
 ﻿namespace Evernet.WebApi.DTOs;
 
-public record RequestResetPasswordDto(string Email);
+public sealed record RequestResetPasswordDto(string Email);

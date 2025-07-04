@@ -13,29 +13,15 @@ public class AuthController(IAuthService authService) : ControllerBase
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] RegisterDto dto)
     {
-        try
-        {
-            await authService.RegisterAsync(dto);
-            return Ok(new { Message = "Registration successful. Please check your email for verification." });
-        }
-        catch (Exception e)
-        {
-            return BadRequest(new { e.Message });
-        }
+        await authService.RegisterAsync(dto);
+        return Ok(new { Message = "Inscription réussie. Veuillez vérifier votre e-mail pour valider votre compte." });
     }
 
     [HttpPost("verify-code")]
     public async Task<IActionResult> Verify([FromBody] VerifyCodeDto dto)
     {
-        try
-        {
-            await authService.VerifyCodeAsync(dto);
-            return Ok(new { Message = "Verification successful. You can now log in." });
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(new { Error = ex.Message });
-        }
+        await authService.VerifyCodeAsync(dto);
+        return Ok(new { Message = "Vérification réussie. Vous pouvez maintenant vous connecter." });
     }
 
     [HttpPost("resend-code")]
@@ -69,29 +55,20 @@ public class AuthController(IAuthService authService) : ControllerBase
     [HttpPost("request-reset-password")]
     public async Task<IActionResult> RequestResetPassword([FromBody] RequestResetPasswordDto dto)
     {
-        try
-        {
-            await authService.RequestResetPasswordAsync(dto.Email);
-            return Ok(new { Message = "Email sent with password reset instructions." });
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(new { Error = ex.Message });
-        }
+        await authService.RequestResetPasswordAsync(dto.Email);
+        return Ok(new
+            { Message = "Un e-mail vous a été envoyé avec les instructions de réinitialisation de mot de passe." });
     }
 
     [HttpPost("reset-password")]
     public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordDto dto)
     {
-        try
+        await authService.ResetPasswordAsync(dto);
+        return Ok(new
         {
-            await authService.ResetPasswordAsync(dto);
-            return Ok(new { Message = "Password reset successful. You can now log in with your new password." });
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(new { Error = ex.Message });
-        }
+            Message =
+                "Mot de passe réinitialisé avec succès. Vous pouvez maintenant vous connecter avec votre nouveau mot de passe."
+        });
     }
 
     [Authorize]
@@ -104,14 +81,7 @@ public class AuthController(IAuthService authService) : ControllerBase
         if (userIdClaim is null || !Guid.TryParse(userIdClaim.Value, out var userId))
             return Unauthorized();
 
-        try
-        {
-            await authService.ChangePasswordAsync(userId, dto);
-            return Ok(new { Message = "Password changed successfully." });
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(new { Error = ex.Message });
-        }
+        await authService.ChangePasswordAsync(userId, dto);
+        return Ok(new { Message = "Mot de passe modifié avec succès." });
     }
 }

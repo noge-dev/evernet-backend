@@ -1,3 +1,3 @@
 ﻿namespace Evernet.WebApi.DTOs;
 
-public record ResendCodeDto(Guid UserId);
+public sealed record ResendCodeDto(Guid UserId);

@@ -5,6 +5,8 @@ using Evernet.WebApi.Interfaces;
 using Evernet.WebApi.OpenApi;
 using Evernet.WebApi.Repositories;
 using Evernet.WebApi.Services;
+using Evernet.WebApi.Validators;
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
@@ -44,6 +46,8 @@ builder.Services.AddAuthentication("Bearer")
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(settings.SecretKey))
         };
     });
+
+builder.Services.AddValidatorsFromAssemblyContaining<VerifyCodeDtoValidator>();
 
 var app = builder.Build();
 

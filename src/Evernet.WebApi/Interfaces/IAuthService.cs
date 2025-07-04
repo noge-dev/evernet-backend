@@ -1,5 +1,4 @@
 ﻿using Evernet.WebApi.DTOs;
-using Evernet.WebApi.Entities;
 
 namespace Evernet.WebApi.Interfaces;
 
